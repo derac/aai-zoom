@@ -1,13 +1,25 @@
 <head>
-    <script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js"></script>
-    <script type="text/javascript" charset="utf-8">
-        var socket = io.connect('http://' + document.domain + ':' + location.port);
-        socket.on('connect', function () {
-            console.log('connected');
-        });
-        socket.on('message', function (data) {
-            console.log(data);
-        });
-    </script>
 </head>
+<body>
+    <input type="text" placeholder="Zoom meeting link" size="50"><button>join</button>
+    <div width="500px" id="translation_output"></div>
+</body>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js"></script>
+<script type="text/javascript" charset="utf-8">
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+    var translation_output = document.querySelector("#translation_output")
+    socket.on('connect', function () {
+        console.log('connected');
+    });
+    socket.on('data', function (data) {
+        console.log(data)
+        var message_text = document.createTextNode(data)
+        var line_break = document.createElement("br")
+        translation_output.appendChild(message_text)
+        translation_output.appendChild(line_break)
+    });
+
+    setInterval(() => {
+        socket.emit("message", "test")
+    }, 500)
+</script>
