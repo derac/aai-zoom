@@ -1,8 +1,7 @@
-from flask import Flask, render_template, send_from_directory
+from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "secret!"
 socketio = SocketIO(app)
 
 
@@ -19,6 +18,12 @@ def handle_message(data):
 @app.route("/")
 def index():
     return render_template("index.html")
+
+
+@app.route("/transcribe", methods=["POST"])
+def transcribe():
+    print(request.get_data(as_text=True))
+    return "blah"
 
 
 if __name__ == "__main__":

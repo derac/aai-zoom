@@ -14,7 +14,21 @@ socket.on("data", function (data) {
   translation_output.appendChild(line_break);
 });
 start_button.addEventListener("click", () => {
-  console.log(zoom_link.value);
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "/transcribe", true);
+  xhr.onload = function (e) {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        console.log(xhr.responseText);
+      } else {
+        console.error(xhr.statusText);
+      }
+    }
+  };
+  xhr.onerror = function (e) {
+    console.error(xhr.statusText);
+  };
+  xhr.send(zoom_link.value);
 });
 
 setInterval(() => {
