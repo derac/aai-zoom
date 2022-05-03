@@ -2,15 +2,14 @@
 
 1. install ubuntu 20.04
 1. sudo apt update
+1. sudo apt install redis
 1. install zoom https://zoom.us/download
+   - Set browser to always use zoommtg for zoom links
+   - Set zoom to remember name and turn off cam on first open
 1. sudo apt-get install portaudio19-dev python3-pyaudio
+1. pip install -r requirements.txt
+1. python3 [./src/flask_server_example.py](./src/flask_server_example.py)
 
-Machine setup instructions
+# Notes
 
-- Install Ubuntu 20.04
-- sudo apt update
-- Install Zoom https://zoom.us/download
-- Set browser to always use zoommtg for zoom links
-- todo: make it so the message to trust link or w/e doesn't show up
-- Set zoom to remember name and turn off cam on first open
-  - wait for admit to room (?)
+Redis is used to allow the AAI api subprocess to emit socketio messages on a redis queue. [./src/flask_server_example.py](./src/flask_server_example.py) is used to start the Flask and socketio server. It is hosted at [127.0.0.1:8000](127.0.0.1:8000). [./src/open_zoom_meeting.py](./src/open_zoom_meeting.py) is used to control opening the links sent through the /transcription endpoint. [./src/pyaudio_to_aai_flask.py](./src/pyaudio_to_aai_flask.py) is used to pipe audio from the computer (default speaker) to socketio through the redis queue. There is some code in the Flask server file to manage these subprocesses.

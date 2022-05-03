@@ -8,12 +8,8 @@ import asyncio
 import base64
 import json
 
-parser = argparse.ArgumentParser()
-parser.add_argument("-auth_key", "-k", type=str, required=True)
-args = parser.parse_args()
-
 FRAMES_PER_BUFFER = 3200
-FORMAT = pyaudio.paInt32
+FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 16000
 
@@ -39,10 +35,8 @@ async def send_receive():
         ping_timeout=20,
     ) as web_socket:
         await asyncio.sleep(0.1)
-        print("Receiving SessionBegins ...")
         session_begins = await web_socket.recv()
         print(session_begins)
-        print("Sending messages ...")
 
         async def send():
             while True:
@@ -58,14 +52,15 @@ async def send_receive():
                 except Exception as e:
                     assert False, "Not a websocket 4008 error"
                 await asyncio.sleep(0.01)
-
             return True
 
         async def receive():
             while True:
                 try:
                     result_str = await web_socket.recv()
-                    print(json.loads(result_str)["text"])
+                    json_result = json.loads(result_str)
+                    if "text" in json_result:
+                        print(json_result["text"])
                 except websockets.exceptions.ConnectionClosedError as e:
                     print(e)
                     assert e.code == 4008
@@ -73,7 +68,12 @@ async def send_receive():
                 except Exception as e:
                     assert False, "Not a websocket 4008 error"
 
-        send_result, receive_result = await asyncio.gather(send(), receive())
+        await asyncio.gather(send(), receive())
 
 
-asyncio.run(send_receive())
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-auth_key", "-k", type=str, required=True)
+    args = parser.parse_args()
+
+    asyncio.run(send_receive())
