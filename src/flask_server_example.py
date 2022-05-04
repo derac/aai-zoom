@@ -4,8 +4,7 @@ from multiprocessing import Process
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO
 
-from open_zoom_meeting import open_zoom_meeting
-from pyaudio_to_aai_flask import send_receive
+from pyaudio_to_aai import send_receive
 
 PYAUDIO_AAI_PROCESS = None
 
