@@ -16,5 +16,5 @@
 - [./src/flask_server_example.py](./src/flask_server_example.py) is used to start the Flask and socketio server. It is hosted at [127.0.0.1:8000](127.0.0.1:8000).
 - [./src/open_zoom_meeting.py](./src/open_zoom_meeting.py) is used to control opening the links sent through the /transcription endpoint.
 - [./src/pyaudio_to_aai_flask.py](./src/pyaudio_to_aai_flask.py) is used to pipe audio from the computer (default speaker) to socketio through the redis queue.
+- There is some code in the Flask server file to manage these last two as subprocesses.
 - [./src/static/zoom-transcribe.js](./src/static/zoom-transcribe.js) contains the client side code for interacting with the socketio server and displaying the translation.
-- There is some code in the Flask server file to manage these subprocesses.
